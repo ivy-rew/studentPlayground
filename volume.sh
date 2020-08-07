@@ -40,7 +40,9 @@ check_volume() {
     fi
 }
 
-while true; do
-    check_volume
-    sleep 1
-done
+if [ "$1" != "TEST" ]; then
+    while true; do
+        check_volume
+        sleep 1
+    done
+fi
