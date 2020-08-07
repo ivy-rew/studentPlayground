@@ -17,17 +17,30 @@
 
 # -F sets separators. syntax: -F"[this_must_be_your_value]"
 
-get_current_volume() {
-    percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget Master))
+maxVol=80
+targetVol=50
+control="Master"
+
+get_volume() {
+    percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
     echo "${percent//%}"
 }
 
+set_volume() {
+    amixer sset -q $control "$1%"
+}
+
+check_volume() {
+    current_volume=$(get_volume)
+    if [ $current_volume -gt $maxVol ]
+    then
+        set_volume $targetVol
+        echo "Music is too loud!!! Set to 80%"
+        espeak -v "de" "Mir ist das zu laut"
+    fi
+}
+
 while true; do
-current_volume=$(get_current_volume)
-if [ $current_volume -gt 81 ]
-then
-    amixer sset -q Master 80%
-    echo "Music is too loud!!! Set to 80%"
-fi
-sleep 1
+    check_volume
+    sleep 1
 done
