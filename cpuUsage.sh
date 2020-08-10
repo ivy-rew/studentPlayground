@@ -21,7 +21,9 @@ get_cpu_usage() {
     echo $cpu_usage
 }
 
-while true; do
-    get_cpu_usage
-    sleep 1
-done
+if [ "$1" != "TEST" ]; then
+    while true; do
+        get_cpu_usage
+        sleep 1
+    done
+fi
