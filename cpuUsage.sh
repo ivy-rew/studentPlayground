@@ -1,6 +1,18 @@
 #!/bin/bash
 
 get_cpu_usage() {
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+        Linux*)     get_linux_cpu_usage;;
+        Darwin*)    get_macos_cpu_usage;;
+    esac
+}
+
+get_macos_cpu_usage() {
+    echo $(ps -A -o %cpu | awk '{s+=$1} END {print s}')
+}
+
+get_linux_cpu_usage() {
     # Get the first line with aggregate of all CPUs
     cpu_now=($(head -n1 /proc/stat))
     # Get all columns but skip the first (which is the "cpu" string)
@@ -26,4 +38,6 @@ if [ "$1" != "TEST" ]; then
         get_cpu_usage
         sleep 1
     done
+elif [ "$1" != "ONCE" ]; then
+    get_cpu_usage
 fi

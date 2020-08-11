@@ -3,7 +3,7 @@
 # to get information about volume
 # amixer sget Master
 
-# send this data to awk and find line with defined strin (db)
+# send this data to awk and find line with defined string (db)
 # awk '/dB/' <(amixer sget Master)
 # output: Mono: Playback 50 [57%] [-27.75dB] [on]
 
@@ -21,10 +21,10 @@ maxVol=80
 targetVol=50
 control="Master"
 
-get_volume() {
-    percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
-    echo "${percent//%}"
-}
+ get_volume() {
+     percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
+     echo "${percent//%}"
+ }
 
 set_volume() {
     amixer sset -q $control "$1%"
@@ -34,15 +34,28 @@ check_volume() {
     current_volume=$(get_volume)
     if [ $current_volume -gt $maxVol ]
     then
-        set_volume $targetVol
-        echo "Music is too loud!!! Set to 80%"
         espeak -v "de" "Mir ist das zu laut"
+        echo "Music is too loud!!! Set to 80%"
+        set_volume $targetVol
     fi
 }
 
-if [ "$1" != "TEST" ]; then
+monitor_volume(){
+    echo "tara"
     while true; do
-        check_volume
-        sleep 1
+
+       check_volume
+       sleep 1
     done
-fi
+}
+
+$1 $2
+
+#if [[ "$1" == "DC" ]]; then
+#    set_volume $2
+#elif [[ "$1" != "TEST" ]]; then
+#    while true; do
+#        check_volume
+#        sleep 1
+#    done
+#fi

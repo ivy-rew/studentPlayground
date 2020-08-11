@@ -20,8 +20,6 @@ volumeUi(){
 }
 
 if [[ "$1" != "test" ]]; then
-    while :
-    do
     choice=$(dialog --menu "Dialog menu" 0 0 0 1 "cpu usage" \
         2 "volume" \
         2>&1 >/dev/tty)
@@ -29,5 +27,4 @@ if [[ "$1" != "test" ]]; then
     1) cpu_usageUi ;;
     2) volumeUi ;;
     esac
-    done
 fi
