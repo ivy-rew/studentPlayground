@@ -21,10 +21,14 @@ maxVol=80
 targetVol=50
 control="Master"
 
- get_volume() {
-     percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
-     echo "${percent//%}"
- }
+get_volume() {
+    percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
+    if [ -z "$percent"]
+    then
+        percent=$(awk -F"[][]" '/Left/ {print $2}' <(amixer sget $control))
+    fi
+    echo "${percent//%}"
+}
 
 set_volume() {
     amixer sset -q $control "$1%"

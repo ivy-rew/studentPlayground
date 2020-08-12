@@ -50,7 +50,6 @@ async def get_cpu_usageExample2(ctx):
 @bot.command()
 async def get_cpu_usage(ctx):
     usage = psutil.cpu_percent()
-    print(usage)
     await ctx.channel.send("Current CPU usage is: "+str(usage)+"%")
 
 @bot.command()
@@ -71,16 +70,22 @@ async def cpu_embed(ctx):
 
 @bot.command()
 async def system_info(ctx):
-    usage = psutil.cpu_percent()
-    color_list = list(Color("green").range_to(Color("red"),100))
-    color = int("0x"+str(color_list[int(usage)])[1:], 16)
-
-    embed = discord.Embed(
-            title="System Info",
-            description=f"Current CPU usage is: {usage}% ",
-            colour = discord.Colour(color)
-        )
-    await ctx.channel.send(embed=embed)    
+    if ctx.message.author.id == jackDiscordId:
+        cpu_usage = psutil.cpu_percent()
+        ram_usage = psutil.virtual_memory().percent
+        values = psutil.virtual_memory()
+        total = values.total >> 20
+        available = values.available >> 20
+        color_list = list(Color("green").range_to(Color("red"),100))
+        color = int("0x"+str(color_list[int(cpu_usage)])[1:], 16)
+        embed = discord.Embed(
+                title="System usage information",
+                colour = discord.Colour(color)
+            )
+        embed.add_field(name="CPU", value=f"Current CPU usage is: {cpu_usage}%")
+        #embed.add_field(name="RAM", value=f"Current RAM usage is: {ram_usage}%")
+        embed.add_field(name="RAM", value=f"Current RAM usage is: {total-available}/{total}MB")
+        await ctx.channel.send(embed=embed)
 
 @bot.command()
 async def set_volume(ctx, volume):
