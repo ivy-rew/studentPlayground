@@ -22,12 +22,19 @@ targetVol=50
 control="Master"
 
 get_volume() {
-    percent=$(awk -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
-    if [ -z "$percent"]
-    then
-        percent=$(awk -F"[][]" '/Left/ {print $2}' <(amixer sget $control))
+    percent=$(awk -q -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
+    re='^[0-9]+$'
+    if [[ $percent =~ $re ]]; then
+        result=$percent
+    else
+        result="FAIL"
     fi
-    echo "${percent//%}"
+    # if [ -z "$percent"]
+    # then
+    #     percent=$(awk -F"[][]" '/Left/ {print $2}' <(amixer sget $control))
+    # fi
+    # echo "${$?//%}"
+    echo $result
 }
 
 set_volume() {
@@ -54,6 +61,11 @@ monitor_volume(){
 }
 
 $1 $2
+# if [ $? -eq 0 ]; then
+#     echo OK
+# else
+#     echo FAIL
+# fi
 
 #if [[ "$1" == "DC" ]]; then
 #    set_volume $2
