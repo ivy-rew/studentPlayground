@@ -1,6 +1,5 @@
 from discord.ext import commands
 from pathlib import Path
-import subprocess
 
 # ======================================================
 #
@@ -24,15 +23,8 @@ async def hello(ctx):
     else:
         await ctx.channel.send('Hello!')
 
-# @bot.command()
-# async def hello2(ctx):
-#     Bot=subprocess.run(["awk -F'[]%[]' '/dB/ {print $2}' <(amixer sget Master)"],stdout=subprocess.PIPE, shell=true)
-#     print(str(Bot.stdout))
-
 @bot.command()
-async def hello2(ctx):
-    Bot=subprocess.Popen("awk -F'[]%[]' '/dB/ {print $2}' <(amixer sget Master)", shell=True, executable="/bin/bash")
-    print(str(Bot.stdout))
+async def hello(ctx):
 
 file = open(Discord_Bot_Dir / 'token.txt','rt')
 bot.run(str(file.read()))

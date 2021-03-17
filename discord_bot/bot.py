@@ -10,6 +10,7 @@ import requests
 #
 # ADD "token.txt" WITH YOUR BOT TOKEN TO RUN THE BOT!!!
 # (it is added to .gitignore so that you won't commit it)
+# (if its not added. ADD IT!)
 #
 # ======================================================
 
@@ -108,6 +109,43 @@ async def set_volume2(ctx, volume):
     await ctx.channel.send(embed=embed)
 
 @bot.command()
+async def get_volume(ctx):
+    # output = subprocess.run(["../volume.sh get_volume"], shell=True)
+    try:
+        output = subprocess.check_output("../volume.sh get_volume", stderr=subprocess.STDOUT, shell=True).decode('ascii')
+    # do something with output
+    except subprocess.CalledProcessError:
+        print(output)
+    embed = discord.Embed(
+            title="Sound volume",
+            description=f"Volume is set to {output}%",
+            colour = discord.Colour(0x1FE4FF)
+        )
+    await ctx.channel.send(embed=embed)
+
+@bot.command()
+async def av(ctx):
+    embed = discord.Embed(
+            title="user",
+            colour = discord.Colour(0x1FE4FF)
+        )
+    embed.set_image(url=ctx.message.author.avatar_url)
+    await ctx.channel.send(embed=embed)
+
+@bot.command()
+async def run_command(ctx, *command):
+    try:
+        output = subprocess.check_output(" ".join(command[:]), stderr=subprocess.STDOUT, shell=True).decode('utf-8')
+    except subprocess.CalledProcessError:
+        print(output)
+    embed = discord.Embed(
+            title="Command output",
+            description=f"{output}",
+            colour = discord.Colour(0x1FE4FF)
+        )
+    await ctx.channel.send(embed=embed)
+
+@bot.command()
 async def ask_admin(ctx):
     answer = input(str(ctx.author)+" asked you something, type response: ")
     embed = discord.Embed(
@@ -128,13 +166,14 @@ async def clear(ctx,amount):
 
 @bot.command()
 async def githubAPI(ctx, githubUser):
-    response = requests.get("https://api.github.com/users/dziqus")
+    response = requests.get("https://api.github.com/users/"+githubUser)
     json_response = response.json()
     embed = discord.Embed(
             title=json_response['login'],
             colour = discord.Colour(0xFFFFFF)
+            # set_image(url=json_response['avatar_url'])
         )
-    embed.set_image(url=json_response['avatar_url'])
+    # embed.set_image(url=json_response['avatar_url'])
     embed.add_field(name="Blog", value=json_response['blog'])
     await ctx.channel.send(embed=embed)
 

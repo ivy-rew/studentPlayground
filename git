@@ -1,0 +1,8 @@
+git add .
+git commit -m "message"
+git push
+
+## Dont forget to change git settings if a new person usese the pc!
+
+git config --global user.name "Name"
+git config --global user.email "email@address.com"
