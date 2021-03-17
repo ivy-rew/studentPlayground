@@ -19,7 +19,7 @@
 
 maxVol=80
 targetVol=50
-control="Master"
+control="default"
 
 get_volume() {
     percent=$(awk -q -F"[][]" '/dB/ {print $2}' <(amixer sget $control))
