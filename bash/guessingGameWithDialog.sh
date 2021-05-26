@@ -5,7 +5,8 @@ gameLoop() {
     number=$(( RANDOM % 100))
     guessNumber=101
     guessAmount=0
-    while [ "$guessNumber" != "$number" ]; do
+    while [ "$guessNumber" != "$number" ];
+    do
         guessNumber=$(dialog --inputbox "Guess the number? $number" 10 30 2>&1 >/dev/tty)
         if [ "$guessNumber" -gt "$number" ]; then
             dialog --msgbox "that is too high" 10 30 
