@@ -3,12 +3,13 @@
 number=$(( RANDOM % 100))
 guessNumber=101
 guessAmount=0
+clear
 
 while [ "$guessNumber" != "$number" ]; do
-  read -p "guess the number?" guessNumber
+  read -p "guess the number?: " guessNumber
   if [ "$guessNumber" -gt "$number" ]; then
     echo "that is too high"
-  else
+  elif [ "$guessNumber" -lt "$number" ]; then
     echo "that is too low"
   fi
   ((guessAmount++))
